@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TodoModule } from './todo/todo.module';
 
 @Module({
-  imports: [TodoModule],
+  imports: [ConfigModule.forRoot(), TodoModule],
   controllers: [],
   providers: [],
 })
