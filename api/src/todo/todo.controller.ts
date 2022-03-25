@@ -6,6 +6,7 @@ import {
   Query,
   Patch,
   Param,
+  Delete,
 } from '@nestjs/common/decorators/http';
 import { UserId } from 'src/pkg/decorator/user-id.decorator';
 import { AuthGuard } from 'src/pkg/guard/auth.guard';
@@ -38,5 +39,10 @@ export class TodoController {
     @Body() updateTodoDto: UpdateTodoDto,
   ) {
     return this.todoService.updateTodoById(id, updateTodoDto);
+  }
+
+  @Delete('/:id')
+  deleteTodoById(@Param('id') id: string) {
+    return this.todoService.deleteTodoById(id);
   }
 }

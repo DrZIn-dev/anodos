@@ -42,4 +42,12 @@ export class TodoService {
     await this.todoRepository.save(todo);
     return true;
   }
+
+  async deleteTodoById(id: string) {
+    const todo = await this.todoRepository.findOneBy({ id });
+    if (!todo) throw new NotFoundException('todo_not_found');
+
+    await this.todoRepository.softRemove(todo);
+    return true;
+  }
 }
