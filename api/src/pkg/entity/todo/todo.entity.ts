@@ -7,7 +7,7 @@ export class TodoEntity extends BaseEntity {
   text: string;
 
   @Column({ type: 'boolean' })
-  isDone: boolean;
+  done: boolean;
 
   @Index()
   @Column({ type: 'text', name: 'user_id' })

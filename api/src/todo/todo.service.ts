@@ -16,7 +16,7 @@ export class TodoService {
   async createTodo(userId: string, createTodoDto: CreateTodoDto) {
     const newTodo = this.todoRepository.create();
     newTodo.text = createTodoDto.text;
-    newTodo.isDone = false;
+    newTodo.done = false;
     newTodo.userId = userId;
 
     await this.todoRepository.save(newTodo);
@@ -38,7 +38,7 @@ export class TodoService {
     if (!todo) throw new NotFoundException('todo_not_found');
 
     if (updateTodoDto?.text) todo.text = updateTodoDto.text;
-    if (updateTodoDto?.isDone) todo.isDone = updateTodoDto.isDone;
+    if (updateTodoDto?.done) todo.done = updateTodoDto.done;
     await this.todoRepository.save(todo);
     return true;
   }
