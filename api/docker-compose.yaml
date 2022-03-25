@@ -1,6 +1,26 @@
 version: '3.7'
 
 services:
+  api:
+    image: ghcr.io/drzin-dev/anodos:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - 8000:80
+    environment:
+      PORT: 80
+      MODE: production
+
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_SYNC: "true"
+      POSTGRES_DROP: "false"
+      POSTGRES_LOGGING: "false"
   postgres:
     image: postgres:14.2-alpine3.15
     environment:
