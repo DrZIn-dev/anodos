@@ -12,6 +12,7 @@ import { TodoModule } from './todo/todo.module';
       useFactory: async (dbConfig: ConfigType<typeof databaseConfig>) => {
         return {
           type: 'postgres',
+          database: dbConfig.db,
           host: dbConfig.host,
           port: dbConfig.port,
           username: dbConfig.username,
