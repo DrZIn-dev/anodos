@@ -11,6 +11,7 @@ async function bootstrap() {
   const port: number = +configService.get('PORT');
   app.useGlobalPipes(
     new ValidationPipe({
+      transform: true,
       whitelist: true,
     }),
   );
