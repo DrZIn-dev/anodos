@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TodoEntity } from 'src/pkg/entity/todo/todo.entity';
 import { Repository } from 'typeorm';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { GetTodoPaginationDto } from './dto/get-todo-pagination.dto';
+import { UpdateTodoDto } from './dto/update-todo.dto';
 
 @Injectable()
 export class TodoService {
@@ -30,5 +31,15 @@ export class TodoService {
     });
 
     return todos;
+  }
+
+  async updateTodoById(id: string, updateTodoDto: UpdateTodoDto) {
+    const todo = await this.todoRepository.findOneBy({ id });
+    if (!todo) throw new NotFoundException('todo_not_found');
+
+    if (updateTodoDto?.text) todo.text = updateTodoDto.text;
+    if (updateTodoDto?.status) todo.status = updateTodoDto.status;
+    await this.todoRepository.save(todo);
+    return true;
   }
 }
