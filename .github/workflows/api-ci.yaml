@@ -42,7 +42,7 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Run e2e test
-        run: yarn run test
+        run: yarn run test:e2e
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
