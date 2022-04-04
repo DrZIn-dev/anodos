@@ -27,50 +27,123 @@ class TodosViewModel: ObservableObject {
         }
     }
     
-    func fetchTodos() {
+    func fetchTodos() async throws {
         //fetch todos
+        let urlString = Constants.baseURL + Endpoint.todos
+        
+        guard let url = URL(string: urlString) else {
+            throw HttpError.badURL
+        }
+        guard let userId:UUID = self.user.id else {
+            throw HttpError.badURL
+        }
+        
+        let todoResponse: [Todo] = try await HttpClient.shared.fetch(url: url, userId: userId)
+        DispatchQueue.main.async {
+            self.todos = todoResponse
+        }
     }
     
     func setShowSheet(_ isShow:Bool) {
         self.isShowSheet = isShow
     }
     
-    func create() {
-        let todo: Todo = Todo(id: UUID(), text: self.newTodoString, status: false)
-        self.todos.append(todo)
+    func create() async throws {
+        let urlString = Constants.baseURL + Endpoint.todos
+        
+        guard let url = URL(string: urlString) else {
+            throw HttpError.badURL
+        }
+        guard let userId:UUID = self.user.id else {
+            throw HttpError.badURL
+        }
+        
+        let body = [ "text": self.newTodoString ]
+        
+        try await HttpClient.shared.sendData(to: url,
+                                             object: body,
+                                             httpMethod: HttpMethods.POST.rawValue,
+                                             userId: userId)
         self.newTodoString = ""
+        try await fetchTodos()
     }
     
-    func update() {
-        for i in 0..<self.todos.count {
-            if self.todos[i].id == self.selectedTodoId {
-                self.todos[i].status = true
-                self.setShowSheet(false)
-            }
+    func update() async throws {
+        guard let todoId = self.selectedTodoId else {
+            return
         }
+        let urlString = Constants.baseURL + Endpoint.todos + "/\(todoId.description)"
+        
+        guard let url = URL(string: urlString) else {
+            throw HttpError.badURL
+        }
+        guard let userId:UUID = self.user.id else {
+            throw HttpError.badURL
+        }
+        
+        let body = [ "done": true ]
+        
+        try await HttpClient.shared.sendData(to: url,
+                                             object: body,
+                                             httpMethod: HttpMethods.PATCH.rawValue,
+                                             userId: userId)
+        try await fetchTodos()
+        self.setShowSheet(false)
     }
     
     func deleteInProgress(at offset: IndexSet) {
-        let tmpTodos:[Todo] = self.todos.filter({!$0.status})
+        let tmpTodos:[Todo] = self.todos.filter({!$0.done})
         offset.forEach { i in
             guard let todoId = tmpTodos[i].id else {
                 return
             }
-            
+
             //remove from db
-            self.todos.removeAll(where: {$0.id == todoId})
+            let urlString = Constants.baseURL + Endpoint.todos + "/\(todoId)"
+            
+            guard let url = URL(string: urlString) else {
+                return
+            }
+            guard let userId:UUID = self.user.id else {
+                return
+            }
+            Task {
+                do {
+                    try await HttpClient.shared.delete(at: todoId, url: url, userId: userId)
+                    
+                    try await fetchTodos()
+                } catch {
+                    print("❌ Error:\(error)")
+                }
+            }
         }
     }
     
     func deleteComplete(at offset: IndexSet) {
-        let tmpTodos:[Todo] = self.todos.filter({$0.status})
+        let tmpTodos:[Todo] = self.todos.filter({$0.done})
         offset.forEach { i in
             guard let todoId = tmpTodos[i].id else {
                 return
             }
-            
+
             //remove from db
-            self.todos.removeAll(where: {$0.id == todoId})
+            let urlString = Constants.baseURL + Endpoint.todos + "/\(todoId)"
+            
+            guard let url = URL(string: urlString) else {
+                return
+            }
+            guard let userId:UUID = self.user.id else {
+                return
+            }
+            Task {
+                do {
+                    try await HttpClient.shared.delete(at: todoId, url: url, userId: userId)
+                    
+                    try await fetchTodos()
+                } catch {
+                    print("❌ Error:\(error)")
+                }
+            }
         }
     }
 }

@@ -18,15 +18,17 @@ struct TodosView: View {
                 Section {
                     TextField("Type some task...", text: $viewModel.newTodoString)
                         .disableAutocorrection(true)
-                        .onSubmit{
-                            viewModel.create()
+                        .onSubmit {
+                            Task {
+                                try await viewModel.create()
+                            }
                         }
                 } header: {
                     Text("Add")
                 }
                 // in progress
                 Section {
-                    ForEach(viewModel.todos.filter({!$0.status})) { todo in
+                    ForEach(viewModel.todos.filter({!$0.done})) { todo in
                         Button(action: {
                             viewModel.setShowSheet(true)
                             viewModel.selectedTodoId = todo.id
@@ -40,7 +42,7 @@ struct TodosView: View {
                 }
                 // complete
                 Section {
-                    ForEach(viewModel.todos.filter({$0.status})) { todo in
+                    ForEach(viewModel.todos.filter({$0.done})) { todo in
                         Button(action: {
                             
                         }) {
@@ -56,8 +58,10 @@ struct TodosView: View {
             .toolbar{
                 if viewModel.newTodoString.count > 0 {
                     Button{
-                        hideKeyboard()
-                        viewModel.create()
+                        Task {
+                            hideKeyboard()
+                            try await viewModel.create()
+                        }
                     } label: {
                         Text("Done")
                     }
@@ -71,13 +75,22 @@ struct TodosView: View {
                 message: nil,
                 buttons: [
                     ActionSheet.Button.default(Text("Mark as Complete")) {
-                        viewModel.update()
+                        Task {
+                            try await viewModel.update()
+                        }
                     }, ActionSheet.Button.cancel({
                         viewModel.setShowSheet(false)
                     })])
         })
         .onAppear {
-            viewModel.initialApp()
+            Task {
+                do {
+                    viewModel.initialApp()
+                    try await viewModel.fetchTodos()
+                } catch {
+                    print("❌ Error:\(error)")
+                }
+            }
         }
     }
 }

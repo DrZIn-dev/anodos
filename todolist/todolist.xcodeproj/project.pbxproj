@@ -20,6 +20,7 @@
 		1EC91D5F27E98E8B000E8635 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC91D5E27E98E8B000E8635 /* Constants.swift */; };
 		1EC91D6127E98FEA000E8635 /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC91D6027E98FEA000E8635 /* Todo.swift */; };
 		1EC91D6327E9928A000E8635 /* ModalType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC91D6227E9928A000E8635 /* ModalType.swift */; };
+		1EF25EFD27FB26CB001D9C61 /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EF25EFC27FB26CB001D9C61 /* HttpClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		1EC91D5E27E98E8B000E8635 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		1EC91D6027E98FEA000E8635 /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
 		1EC91D6227E9928A000E8635 /* ModalType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalType.swift; sourceTree = "<group>"; };
+		1EF25EFC27FB26CB001D9C61 /* HttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +175,7 @@
 				1EC91D5E27E98E8B000E8635 /* Constants.swift */,
 				1EC91D6227E9928A000E8635 /* ModalType.swift */,
 				1E3622E327E9C211005FEA97 /* Extension.swift */,
+				1EF25EFC27FB26CB001D9C61 /* HttpClient.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -311,6 +314,7 @@
 				1EC91D6327E9928A000E8635 /* ModalType.swift in Sources */,
 				1EC91D5F27E98E8B000E8635 /* Constants.swift in Sources */,
 				1EC91D5B27E98E0D000E8635 /* TodosViewModel.swift in Sources */,
+				1EF25EFD27FB26CB001D9C61 /* HttpClient.swift in Sources */,
 				1EC91D2D27E98C1C000E8635 /* TodosView.swift in Sources */,
 				1EC91D5D27E98E17000E8635 /* User.swift in Sources */,
 				1EC91D2B27E98C1C000E8635 /* todolistApp.swift in Sources */,
