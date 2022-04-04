@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TodoEntity } from 'src/pkg/entity/todo/todo.entity';
 import { Repository } from 'typeorm';
@@ -19,8 +23,10 @@ export class TodoService {
     newTodo.done = false;
     newTodo.userId = userId;
 
-    await this.todoRepository.save(newTodo);
-    return newTodo.id;
+    await this.todoRepository.save(newTodo).catch((error) => {
+      throw new InternalServerErrorException(error?.message);
+    });
+    return newTodo;
   }
 
   async getTodoPagination(userId: string, getTodoDto: GetTodoPaginationDto) {
