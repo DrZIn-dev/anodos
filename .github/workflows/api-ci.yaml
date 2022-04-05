@@ -1,8 +1,8 @@
 name: API CI
 
 on:
-  push:
-    branches: [dev]
+  pull_request:
+    branches: [main]
 
 jobs:
   unit-test:
@@ -19,10 +19,42 @@ jobs:
           node-version: 14.x
       - name: Install dependencies
         run: yarn install
-      - name: Run e2e test
+      - name: Run Unit test
         run: yarn run test
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
         with:
           files: api/junit.xml
+
+  e2e-test:
+    needs:
+      - unit-test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./api
+    env:
+      PORT: 8000
+      MODE: development
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_SYNC: true
+      POSTGRES_DROP: false
+      POSTGRES_LOGGING: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: create postgres container
+        run: docker-compose up -d postgres
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install dependencies
+        run: yarn install
+      - name: Run e2e test
+        run: yarn run test:e2e
