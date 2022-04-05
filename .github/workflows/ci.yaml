@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       api_changed: ${{ steps.api-changed-files.outputs.any_changed }}
-      app_changed: ${{ steps.app-changed-files.outputs.any_changed }}
+      todolist_changed: ${{ steps.todolist-changed-files.outputs.any_changed }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -22,12 +22,12 @@ jobs:
           files: |
             api/
       - name: Get changed files
-        id: app-changed-files
+        id: todolist-changed-files
         uses: tj-actions/changed-files@v14.1
         with:
           since_last_remote_commit: 'true'
           files: |
-            app/
+            todolist/
 
   api-unit-test:
     if: needs.check-file-changed.outputs.api_changed == 'true'
@@ -86,13 +86,13 @@ jobs:
       - name: Run e2e test
         run: yarn run test:e2e
   
-  app-unit-test:    
-    if: needs.check-file-changed.outputs.app_changed == 'true'
+  todolist-unit-test:    
+    if: needs.check-file-changed.outputs.todolist_changed == 'true'
     needs:
       - check-file-changed
     runs-on: macos-latest
     defaults:
       run:
-        working-directory: ./app
+        working-directory: ./todolist
     steps:
-      - run: echo "running app unit test"
+      - run: echo "running todolist unit test"
