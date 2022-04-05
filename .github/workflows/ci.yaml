@@ -86,7 +86,7 @@ jobs:
       - name: Run e2e test
         run: yarn run test:e2e
   
-  todolist-unit-test:    
+  todo-list-unit-test:    
     if: needs.check-file-changed.outputs.todolist_changed == 'true'
     needs:
       - check-file-changed
