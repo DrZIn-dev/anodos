@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-file-changed:
+    runs-on: ubuntu-latest
+    outputs:
+      api_changed: ${{ steps.api-changed-files.outputs.any_changed }}
+      todolist_changed: ${{ steps.todolist-changed-files.outputs.any_changed }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: Get changed files
+        id: api-changed-files
+        uses: tj-actions/changed-files@v14.1
+        with:
+          since_last_remote_commit: 'true'
+          files: |
+            api/
+      - name: Get changed files
+        id: todolist-changed-files
+        uses: tj-actions/changed-files@v14.1
+        with:
+          since_last_remote_commit: 'true'
+          files: |
+            todolist/
+
+  api-unit-test:
+    if: needs.check-file-changed.outputs.api_changed == 'true'
+    needs:
+      - check-file-changed
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./api
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install dependencies
+        run: yarn install
+      - name: Run Unit test
+        run: yarn run test
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: api/junit.xml
+
+  api-e2e-test:
+    needs:
+      - api-unit-test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./api
+    env:
+      PORT: 8000
+      MODE: development
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_SYNC: true
+      POSTGRES_DROP: false
+      POSTGRES_LOGGING: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: create postgres container
+        run: docker-compose up -d postgres
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install dependencies
+        run: yarn install
+      - name: Run e2e test
+        run: yarn run test:e2e
+  
+  todolist-unit-test:    
+    if: needs.check-file-changed.outputs.todolist_changed == 'true'
+    needs:
+      - check-file-changed
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ./todolist
+    steps:
+      - uses: actions/checkout@v2
+      - run: echo "running todolist unit test"
