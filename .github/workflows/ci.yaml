@@ -101,4 +101,9 @@ jobs:
           xcodebuild -target todolist.xcodeproj \
             -scheme todolist \
             -destination 'platform=iOS Simulator,OS=15.2,name=iPhone 12 mini' \
+            -resultBundlePath TestResults \
             test
+      - uses: kishikawakatsumi/xcresulttool@v1
+        with:
+          path: TestResults.xcresult
+        if: success() || failure()
