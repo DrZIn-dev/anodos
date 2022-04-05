@@ -97,3 +97,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: echo "running todolist unit test"
+      - name: Build
+        run: swift build
+      - name: Run tests
+        run: swift test
