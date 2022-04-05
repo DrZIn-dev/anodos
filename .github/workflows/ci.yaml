@@ -94,14 +94,15 @@ jobs:
     defaults:
       run:
         working-directory: ./todolist
+    env:
+      SCHEME: "Actions"
+      DEVICE: "iPhone 11"
+      DERIVED_DATA_PATH: "DerivedData"
     steps:
       - uses: actions/checkout@v2
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: '13.2.1'
-      - name: Force Xcode 13.2.1
-        run: sudo xcode-select -switch /Applications/Xcode_13.2.1.app
-      - name: Build
-        run: swift build
-      - name: Run tests
-        run: swift test
+      - name: Build application
+        run: |
+          set -o pipefail && xcodebuild clean -scheme $SCHEME -destination "platform=iOS Simulator,name=$DEVICE" -derivedDataPath $DERIVED_DATA_PATH build-for-testing | xcpretty --color --simple
