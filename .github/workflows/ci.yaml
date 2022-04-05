@@ -1,4 +1,4 @@
-name: API CI
+name: CI
 
 on:
   pull_request:
@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       api_changed: ${{ steps.api-changed-files.outputs.any_changed }}
+      app_changed: ${{ steps.app-changed-files.outputs.any_changed }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -20,8 +21,15 @@ jobs:
           since_last_remote_commit: 'true'
           files: |
             api/
+      - name: Get changed files
+        id: app-changed-files
+        uses: tj-actions/changed-files@v14.1
+        with:
+          since_last_remote_commit: 'true'
+          files: |
+            app/
 
-  unit-test:
+  api-unit-test:
     if: needs.check-file-changed.outputs.api_changed == 'true'
     needs:
       - check-file-changed
@@ -46,9 +54,9 @@ jobs:
         with:
           files: api/junit.xml
 
-  e2e-test:
+  api-e2e-test:
     needs:
-      - unit-test
+      - api-unit-test
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -77,3 +85,14 @@ jobs:
         run: yarn install
       - name: Run e2e test
         run: yarn run test:e2e
+  
+  app-unit-test:    
+    if: needs.check-file-changed.outputs.app_changed == 'true'
+    needs:
+      - check-file-changed
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ./app
+    steps:
+      - run: echo "running app unit test"
