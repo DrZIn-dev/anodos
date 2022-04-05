@@ -146,4 +146,8 @@ class TodosViewModel: ObservableObject {
             }
         }
     }
+    
+    func helloWorldFunc() -> String {
+        return "Hello, world <3"
+    }
 }

@@ -1,14 +1,15 @@
 //
-//  todolistTests.swift
-//  todolistTests
+//  todolistTest.swift
+//  todolistTest
 //
-//  Created by Nuttapon Buaban on 22/3/2565 BE.
+//  Created by Nuttapon Buaban on 5/4/2565 BE.
 //
 
 import XCTest
-@testable import todolist
 
-class todolistTests: XCTestCase {
+@testable import Anodos
+
+class todolistTest: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -28,9 +29,17 @@ class todolistTests: XCTestCase {
 
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
-        self.measure {
+        measure {
             // Put the code you want to measure the time of here.
         }
+    }
+    
+    func testTodosViewModel() throws {
+        let subject = TodosViewModel()
+        
+        let result = subject.helloWorldFunc()
+        
+        XCTAssertEqual(result, "Hello, world <3")
     }
 
 }
