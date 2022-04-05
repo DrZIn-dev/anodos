@@ -57,6 +57,7 @@ jobs:
           cache-to: type=gha,mode=max
           pull: true
           push: true
+          context: ./api
           file: ./api/Dockerfile
           target: production
           tags: |
