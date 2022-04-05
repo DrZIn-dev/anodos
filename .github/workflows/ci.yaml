@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       api_changed: ${{ steps.api-changed-files.outputs.any_changed }}
-      todolist_changed: ${{ steps.todolist-changed-files.outputs.any_changed }}
+      todo_list_changed: ${{ steps.todo-list-changed-files.outputs.any_changed }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -22,7 +22,7 @@ jobs:
           files: |
             api/
       - name: Get changed files
-        id: todolist-changed-files
+        id: todo-list-changed-files
         uses: tj-actions/changed-files@v14.1
         with:
           since_last_remote_commit: 'true'
@@ -87,7 +87,7 @@ jobs:
         run: yarn run test:e2e
   
   todo-list-unit-test:    
-    if: needs.check-file-changed.outputs.todolist_changed == 'true'
+    if: needs.check-file-changed.outputs.todo_list_changed == 'true'
     needs:
       - check-file-changed
     runs-on: macos-latest
