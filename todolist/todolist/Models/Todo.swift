@@ -10,5 +10,9 @@ import Foundation
 struct Todo: Identifiable, Codable {
     let id: UUID?
     var text: String
-    var status: Bool
+    var done: Bool
+    var userId: UUID?
+    var createAt: String?
+    var updateAt: String?
+    var deleteAt: String?
 }

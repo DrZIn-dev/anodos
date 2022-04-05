@@ -8,11 +8,11 @@
 import Foundation
 
 enum Constants {
-    static let baseURL: String = ""
+    static let baseURL: String = "https://anodos.medev.house/api/"
 }
 
 enum Endpoint {
-    static let todos = "todos"
+    static let todos = "todo"
 }
 
 enum DefaultKeys {

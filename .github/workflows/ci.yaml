@@ -86,7 +86,7 @@ jobs:
       - name: Run e2e test
         run: yarn run test:e2e
   
-  todolist-unit-test:    
+  todo-list-unit-test:    
     if: needs.check-file-changed.outputs.todolist_changed == 'true'
     needs:
       - check-file-changed
@@ -96,8 +96,14 @@ jobs:
         working-directory: ./todolist
     steps:
       - uses: actions/checkout@v2
-      - run: echo "running todolist unit test"
-      - name: Build
-        run: swift build
-      - name: Run tests
-        run: swift test
+      - name: Build and test
+        run:  |
+          xcodebuild -target todolist.xcodeproj \
+            -scheme todolist \
+            -destination 'platform=iOS Simulator,OS=15.2,name=iPhone 12 mini' \
+            -resultBundlePath TestResults \
+            test
+      - uses: kishikawakatsumi/xcresulttool@v1
+        with:
+          path: ./todolist/TestResults.xcresult
+        if: success() || failure()
