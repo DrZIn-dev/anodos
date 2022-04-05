@@ -103,6 +103,8 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: '13.2.1'
-      - name: Build application
-        run: |
-          set -o pipefail && xcodebuild clean -scheme $SCHEME -destination "platform=iOS Simulator,name=$DEVICE" -derivedDataPath $DERIVED_DATA_PATH build-for-testing | xcpretty --color --simple
+      - name: Build and test
+        run:  xcodebuild test \
+                -project todolist.xcodeproj \
+                -scheme todolist \
+                -destination 'platform=iOS Simulator,OS=15.4,name=iPhone 12 mini'
