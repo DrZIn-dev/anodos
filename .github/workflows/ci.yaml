@@ -96,7 +96,8 @@ jobs:
         working-directory: ./todolist
     steps:
       - uses: actions/checkout@v2
-      - run: echo "running todolist unit test"
+      - name: Force Xcode 13.3
+        run: sudo xcode-select -switch /Applications/Xcode_13.3.app
       - name: Build
         run: swift build
       - name: Run tests
