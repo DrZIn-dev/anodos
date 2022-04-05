@@ -94,15 +94,11 @@ jobs:
     defaults:
       run:
         working-directory: ./todolist
-    env:
-      SCHEME: "Actions"
-      DEVICE: "iPhone 11"
-      DERIVED_DATA_PATH: "DerivedData"
     steps:
       - uses: actions/checkout@v2
       - name: Build and test
         run:  |
           xcodebuild -target todolist.xcodeproj \
             -scheme todolist \
-            -destination 'platform=iOS Simulator,OS=15.4,name=iPhone 12 mini' \
+            -destination 'platform=iOS Simulator,OS=15.2,name=iPhone 12 mini' \
             test
