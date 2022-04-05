@@ -69,6 +69,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "dockerize api"
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.STAGING_PRIVATE_KEY }}
+          known_hosts: "just-a-placeholder-so-we-dont-get-errors"
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H 206.189.38.174 >> ~/.ssh/known_hosts
+      - name: Deploy Staging Server
+        run: ssh root@206.189.38.174 'cd /root/deployment && make DEPLOY_ANODOS_STAGING'
 
   todo-list-build:
     if: needs.check-file-changed.outputs.todo_list_changed == 'true'
