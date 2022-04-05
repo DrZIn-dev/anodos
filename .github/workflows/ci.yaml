@@ -105,5 +105,5 @@ jobs:
             test
       - uses: kishikawakatsumi/xcresulttool@v1
         with:
-          path: TestResults.xcresult
+          path: ./todolist/TestResults.xcresult
         if: success() || failure()
