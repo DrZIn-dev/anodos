@@ -1,8 +1,8 @@
-name: Staging CD
+name: Production CD
 
 on:
-  push:
-    branches: [main]
+  release:
+    types: [published]
 
 jobs:
   check-file-changed:
@@ -61,7 +61,7 @@ jobs:
           file: ./api/Dockerfile
           target: production
           tags: |
-            ghcr.io/drzin-dev/anodos:latest
+            ghcr.io/drzin-dev/anodos:${{ steps.get_release.outputs.tag_name }}
 
   api-deploy:
     needs:
@@ -76,8 +76,8 @@ jobs:
           known_hosts: "just-a-placeholder-so-we-dont-get-errors"
       - name: Adding Known Hosts
         run: ssh-keyscan -H 206.189.38.174 >> ~/.ssh/known_hosts
-      - name: Deploy Staging Server
-        run: ssh root@206.189.38.174 'cd /root/deployment && make DEPLOY_ANODOS_STAGING'
+      # - name: Deploy Staging Server
+      #   run: ssh root@206.189.38.174 'cd /root/deployment && make DEPLOY_ANODOS_STAGING'
 
   todo-list-build:
     if: needs.check-file-changed.outputs.todo_list_changed == 'true'
