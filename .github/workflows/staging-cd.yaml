@@ -93,7 +93,7 @@ jobs:
   todo-list-publish-test-flight:
     if: needs.check-file-changed.outputs.todo_list_changed == 'true'
     needs:
-      - check-file-changed
+      - todo-list-build
     runs-on: macos-latest
     defaults:
       run:
