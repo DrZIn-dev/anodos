@@ -1,12 +1,22 @@
 version: '3.7'
 
 services:
+  postgres:
+    image: postgres:14.2-alpine3.15
+    environment:
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_pv:/var/lib/postgresql/data
   api:
+    depends_on:
+      - postgres
     image: ghcr.io/drzin-dev/anodos:latest
     build:
       context: .
       dockerfile: Dockerfile
-      target: production
+      target: ${MODE:-development}
     ports:
       - 8000:80
     environment:
@@ -21,14 +31,8 @@ services:
       POSTGRES_SYNC: "true"
       POSTGRES_DROP: "false"
       POSTGRES_LOGGING: "false"
-  postgres:
-    image: postgres:14.2-alpine3.15
-    environment:
-      POSTGRES_PASSWORD: password
-    ports:
-      - 5432:5432
     volumes:
-      - postgres_pv:/var/lib/postgresql/data
+      - ./src:/usr/src/app/src
 
 volumes:
   postgres_pv:
