@@ -112,6 +112,10 @@ jobs:
           committer_email: actions@github.com
           message: 'chore(todolist): bump version to ${{ steps.get_release.outputs.tag_name }} 🚀 [skip ci]'
           add: '.'
+          pull: '--rebase --autostash'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REF: refs/heads/main
 
   todo-list-publish-TestFlight:
     if: needs.check-file-changed.outputs.todo_list_changed == 'true'
