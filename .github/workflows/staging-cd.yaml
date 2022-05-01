@@ -90,3 +90,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: xcrun agvtool new-marketing-version latest
+      - run : xcrun agvtool new-version ${{github.run_number}}
