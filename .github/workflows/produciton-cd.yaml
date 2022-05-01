@@ -105,17 +105,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - run: xcrun agvtool new-marketing-version ${{ steps.get_release.outputs.tag_name }}
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v9
+      - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          committer_name: GitHub Actions
-          committer_email: actions@github.com
-          message: 'chore(todolist): bump version to ${{ steps.get_release.outputs.tag_name }} 🚀 [skip ci]'
-          add: '.'
-          pull: '--rebase --autostash'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REF: refs/heads/main
+          branch: main
+          commit_message: 'chore(todolist): bump version to ${{ steps.get_release.outputs.tag_name }} 🚀 [skip ci]'
 
   todo-list-publish-TestFlight:
     if: needs.check-file-changed.outputs.todo_list_changed == 'true'
