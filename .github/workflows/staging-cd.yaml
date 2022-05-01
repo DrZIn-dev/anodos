@@ -79,7 +79,7 @@ jobs:
       - name: Deploy Staging Server
         run: ssh root@206.189.38.174 'cd /root/deployment && make DEPLOY_ANODOS_STAGING'
 
-  todo-list-build:
+  todo-list-publish-TestFlight:
     if: needs.check-file-changed.outputs.todo_list_changed == 'true'
     needs:
       - check-file-changed
@@ -89,14 +89,4 @@ jobs:
         working-directory: ./todolist
     steps:
       - uses: actions/checkout@v2
-
-  todo-list-publish-TestFlight:
-    if: needs.check-file-changed.outputs.todo_list_changed == 'true'
-    needs:
-      - todo-list-build
-    runs-on: macos-latest
-    defaults:
-      run:
-        working-directory: ./todolist
-    steps:
-      - uses: actions/checkout@v2
+      - run: xcrun agvtool new-marketing-version latest
