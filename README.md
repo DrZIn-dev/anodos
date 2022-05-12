@@ -269,7 +269,9 @@ jobs:
 จากตัวอย่างใน step มีการใช้งาน workflow `actions/hello_world@main`  โดยกำหนด input คือ first_name, middle_name และ last_name
 
 ## การออกแบบ CI/CD Pipeline
-![CI-CD-Diagram drawio (1)](https://user-images.githubusercontent.com/52484219/167917189-acdfb708-f491-4408-9f4d-5f27f58d19d7.svg)
+
+![CI-CD-Diagram drawio (2)](https://user-images.githubusercontent.com/52484219/167999407-b617c119-01e3-41c2-8ac1-2f120ab3e6db.svg)
+
 แนวคิดในการออกแบบ pipeline เพื่อให้รองรับการใช้งาน การทดสอบ การ deploy สำหรับทดสอบ และ deploy สำหรับ production โดยแบ่งออกเป็น 3 ส่วนดังนี้
 
 1. **Continuous Integration**
